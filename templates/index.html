@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Web Interface ML Models</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="form-container">
+            <h1>Classifier Input</h1>
+            <form id="classify-form">
+                <div class="label-input-group">
+                    <label for="clump">Clump Thickness: </label>
+                    <input type="text" id="clump" name="Clump_thickness" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="UniformitySize">Uniformity Cell Size: </label>
+                    <input type="text" id="UniformitySize" name="Uniformity_Cell_Size" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="UniformityShape">Uniformity Cell Shape: </label>
+                    <input type="text" id="UniformityShape" name="Uniformity_Cell_Shape" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="Adhesion">Margin Adhesion: </label>
+                    <input type="text" id="Adhesion" name="Marginal_Adhesion" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="Epithelial">Single Epithelial Cell Size: </label>
+                    <input type="text" id="Epithelial" name="Single_Epithelial_Cell_Size" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="Chromatin">Bland Chromatin: </label>
+                    <input type="text" id="Chromatin" name="Bland_Chromatin" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="Nucleoli">Normal Nucleoli: </label>
+                    <input type="text" id="Nucleoli" name="Normal_Nucleoli" required>
+                </div>
+                <div class="label-input-group">
+                    <label for="Mitoses">Mitoses: </label>
+                    <input type="text" id="Mitoses" name="Mitoses" required>
+                </div>
+                <div class="classifier">
+                    <label>Classifier:</label>
+                    <input type="radio" id="nearest-neighbor" name="classifier" value="nearest-neighbor" required>
+                    <label for="nearest-neighbor">Nearest Neighbor</label>
+                    <input type="radio" id="naive-bayes" name="classifier" value="naive-bayes">
+                    <label for="naive-bayes">Naïve Bayes</label>
+                    <input type="radio" id="decision-tree" name="classifier" value="Decision Tree">
+                    <label for="decision-tree">Decision Tree</label>
+                </div>
+                
+                <button type="button" id="submit-btn">Classify</button>
+            </form>
+        </div>
+        <div class="response-container">
+            <h2>Response</h2>
+            <div id="response-receipt"></div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#submit-btn').on('click', function () {
+                // Serialize the form data
+                var formData = $('#classify-form').serialize();
+                console.log("Form Data: ", formData);  // Log the serialized form data
+    
+                // POST request using jQuery to your Flask backend
+                $.post('/classify', formData, function (response) {
+                    console.log("Response from server:", response); // Log the server response
+                    if (response.prediction) {
+                        // Create a string for the inputs, separated by commas
+                        const inputs = [
+                            response.user_input.Clump_thickness,
+                            response.user_input.Uniformity_Cell_Size,
+                            response.user_input.Uniformity_Cell_Shape,
+                            response.user_input.Marginal_Adhesion,
+                            response.user_input.Single_Epithelial_Cell_Size,
+                            response.user_input.Bland_Chromatin,
+                            response.user_input.Normal_Nucleoli,
+                            response.user_input.Mitoses
+                        ].join(', ');  // Join the numbers with commas
+    
+                        var resultHtml = `<p><strong>Inputs:</strong> ${inputs}</p>
+                                          <p><strong>Classifier:</strong> ${response.classifier}</p>
+                                          <p><strong>Prediction:</strong> ${response.prediction}</p>`;
+    
+                        $('#response-receipt').html(resultHtml);
+    
+                        // Show the response container
+                        $('.response-container').addClass('active');
+                    } else {
+                        $('#response-receipt').html('<p>An unexpected error occurred. Please try again.</p>');
+                        $('.response-container').removeClass('active'); // Hide response container on error
+                    }
+                }).fail(function(xhr, status, error) {
+                    console.error('Error occurred:', xhr.responseText);
+                    $('#response-receipt').html('<p>An error occurred: ' + xhr.responseText + '</p>');
+                    $('.response-container').removeClass('active'); // Hide response container on error
+                });
+            });
+        });
+    </script>
+    
+    
+    
+</body>
+</html>

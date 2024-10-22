@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-container {
+    width: 45%;
+}
+
+.response-container {
+    width: 45%;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    display: none; /* Hide it initially */
+}
+
+.response-container.active {
+    display: block; /* Show it when the 'active' class is added */
+}
+
+label {
+    display: flex;
+    font-weight: bold;
+    width: 240px; 
+    margin-top: 10px;
+}
+
+.label-input-group {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.classifier {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.classifier label {
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+.classifier input[type="radio"] {
+    margin-right: 10px;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#response-receipt p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+#response-receipt {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+}
